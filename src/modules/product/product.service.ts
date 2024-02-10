@@ -39,4 +39,29 @@ export class ProductService implements IProductService {
 
     return new ResonseData<ProductEntity[]>("success", 200, products);
   }
+
+  async getById(id:number): Promise<ResonseData<ProductEntity>> {
+    const product = await this.#productRepository.getById(id);
+
+    let resData: ResonseData<ProductEntity>;
+    if (product) {
+      resData = new ResonseData("success", 200, product);
+    } else {
+      resData = new ResonseData("not found", 404);
+    }
+
+    return resData;
+  }
+
+  async update(id:number, dto: ProductEntity): Promise<ResonseData<ProductEntity>> {
+    const product = await this.#productRepository.update(id, dto);
+
+    return new ResonseData<ProductEntity>("success", 200, product);
+  }
+
+  async delete(id: number): Promise<ResonseData<ProductEntity>> {
+    const product = await this.#productRepository.delete(id);
+
+    return new ResonseData<ProductEntity>("success", 200, product);
+  }
 }
