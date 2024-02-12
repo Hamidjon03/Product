@@ -12,6 +12,6 @@ export interface IProductService {
   update(
     id: number,
     dto: UpdateProductDto
-  ): Promise<ResponseData<ProductEntity | undefined>>;
-  delete(id: number): Promise<ResponseData<ProductEntity | undefined>>;
+  ): Promise<ResponseData<ProductEntity >>;
+  delete(id: number): Promise<ResponseData<ProductEntity >>;
 }

@@ -34,7 +34,7 @@ export class ProductRepository extends Postgres implements IProductRepository {
       id
     );
   }
-  async delete(id: number): Promise<ProductEntity | undefined> {
+  async delete(id: number): Promise<ProductEntity> {
     return await this.fetch<ProductEntity>(
       "delete from products where id = $1 returning *",
       id
@@ -43,7 +43,7 @@ export class ProductRepository extends Postgres implements IProductRepository {
   async update(
     id: number,
     entity: ProductEntity
-  ): Promise<ProductEntity | undefined> {
+  ): Promise<ProductEntity> {
     return await this.fetch<ProductEntity>(
       "update products set name=$1, price = $2, count = $3 where id = $4 returning *",
       entity.name,
