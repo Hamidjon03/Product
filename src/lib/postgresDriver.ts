@@ -11,12 +11,13 @@ export class Postgres {
     ...arg: ARGType[]
   ): Promise<ResponseType> {
     const client: PoolClient = await pool.connect();
+    // console.log("client :", client);
 
     try {
       const {
         rows: [data],
       } = await client.query(sql, arg);
-
+      console.log(data);
       return data;
     } finally {
       client.release();

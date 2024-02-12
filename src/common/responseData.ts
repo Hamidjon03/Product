@@ -1,4 +1,4 @@
-export class ResonseData<TData> {
+export class ResponseData<TData> {
   message: string;
   statusCode: number;
   data: TData | null;

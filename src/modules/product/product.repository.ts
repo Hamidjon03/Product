@@ -1,4 +1,5 @@
 import { Postgres } from "../../lib/postgresDriver";
+import { IProductQueryDto } from "./dto/query.dto";
 import { ProductEntity } from "./entity/product.entity";
 import { IProductRepository } from "./interfaces/product.repository";
 
@@ -9,8 +10,14 @@ export class ProductRepository extends Postgres implements IProductRepository {
       name
     );
   }
-  async getAll(): Promise<ProductEntity[]> {
-    return await this.fetchAll<ProductEntity>("select * from products");
+  async getAll(query: IProductQueryDto): Promise<ProductEntity[]> {
+
+    const searchQuery = query.name ? `%${query.name}%` : "%%";
+    
+    return await this.fetchAll<ProductEntity>(
+      `select * from products where name ILIKE $1`,
+      searchQuery
+    );
   }
 
   async insert(entity: ProductEntity): Promise<ProductEntity> {

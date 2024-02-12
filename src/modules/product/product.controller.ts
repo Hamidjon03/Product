@@ -1,28 +1,34 @@
-import { ResonseData } from "../../common/responseData";
+import { ResponseData } from "../../common/responseData";
 import { Error } from "../../common/types/types";
 import { checkDto } from "../../lib/cheackDto";
 import { CreateProductDto, createProductSchema } from "./dto/create.dto";
+import { IProductQueryDto, productQuerySchema } from "./dto/query.dto";
 import { UpdateProductDto, updateProductSchema } from "./dto/update.dto";
 import { ProductNameAlreadyExist } from "./exception/product.exception";
 import { IProductService } from "./interfaces/product.service";
 import { Request, Response } from "express";
 
 export class ProductController {
-  #productService: IProductService;
+  private productService: IProductService;
 
   constructor(productService: IProductService) {
-    this.#productService = productService;
+    this.productService = productService;
   }
 
-  async getAll(_: Request, res: Response) {
+  async getAll(req: Request, res: Response) {
     try {
-      const resData = await this.#productService.getAll();
+      const query: IProductQueryDto = req.query;
+      // console.log("query :", query);
+
+      checkDto<IProductQueryDto>(productQuerySchema, query);
+
+      const resData = await this.productService.getAll(query);
 
       res.status(resData.statusCode).json(resData);
     } catch (error: Error | any) {
-      const resData = new ResonseData(
+      const resData = new ResponseData(
         error.message,
-        error.status || 500,
+        error.statusCode || 500,
         null,
         error
       );
@@ -37,19 +43,19 @@ export class ProductController {
 
       checkDto<CreateProductDto>(createProductSchema, dto);
 
-      const getByName = await this.#productService.getByName(dto.name);
+      const getByName = await this.productService.getByName(dto.name);
 
       if (getByName.data) {
         throw new ProductNameAlreadyExist();
       }
 
-      const resData = await this.#productService.create(dto);
+      const resData = await this.productService.create(dto);
 
       res.status(resData.statusCode).json(resData);
     } catch (error: Error | any) {
-      const resData = new ResonseData(
+      const resData = new ResponseData(
         error.message,
-        error.status || 500,
+        error.statusCode || 500,
         null,
         error
       );
@@ -61,13 +67,13 @@ export class ProductController {
   async getById(req: Request, res: Response) {
     try {
       const id: number = Number(req.params.id);
-      const resData = await this.#productService.getById(id);
+      const resData = await this.productService.getById(id);
 
       res.status(resData.statusCode).json(resData);
     } catch (error: Error | any) {
-      const resData = new ResonseData(
+      const resData = new ResponseData(
         error.message,
-        error.status || 500,
+        error.statusCode || 500,
         null,
         error
       );
@@ -79,13 +85,13 @@ export class ProductController {
   async delete(req: Request, res: Response) {
     try {
       const id: number = Number(req.params.id);
-      const resData = await this.#productService.delete(id);
+      const resData = await this.productService.delete(id);
 
       res.status(resData.statusCode).json(resData);
     } catch (error: Error | any) {
-      const resData = new ResonseData(
+      const resData = new ResponseData(
         error.message,
-        error.status || 500,
+        error.statusCode || 500,
         null,
         error
       );
@@ -99,13 +105,13 @@ export class ProductController {
       const id: number = Number(req.params.id);
       const dto: UpdateProductDto = req.body;
       checkDto<UpdateProductDto>(updateProductSchema, dto);
-      const resData = await this.#productService.update(id, dto);
+      const resData = await this.productService.update(id, dto);
 
       res.status(resData.statusCode).json(resData);
     } catch (error: Error | any) {
-      const resData = new ResonseData(
+      const resData = new ResponseData(
         error.message,
-        error.status || 500,
+        error.statusCode || 500,
         null,
         error
       );
