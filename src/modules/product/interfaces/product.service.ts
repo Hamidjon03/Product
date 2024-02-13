@@ -8,10 +8,10 @@ export interface IProductService {
   getAll(query: IProductQueryDto): Promise<ResponseData<ProductEntity[]>>;
   create(dto: CreateProductDto): Promise<ResponseData<ProductEntity>>;
   getByName(name: string): Promise<ResponseData<ProductEntity | undefined>>;
-  getById(id: number): Promise<ResponseData<ProductEntity | undefined>>;
+  getById(id: number): Promise<ResponseData<ProductEntity>>;
   update(
     id: number,
     dto: UpdateProductDto
-  ): Promise<ResponseData<ProductEntity >>;
-  delete(id: number): Promise<ResponseData<ProductEntity >>;
+  ): Promise<ResponseData<ProductEntity>>;
+  delete(id: number): Promise<ResponseData<ProductEntity>>;
 }

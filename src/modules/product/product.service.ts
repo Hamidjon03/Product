@@ -46,7 +46,7 @@ export class ProductService implements IProductService {
     return new ResponseData<ProductEntity[]>("success", 200, products);
   }
 
-  async getById(id: number): Promise<ResponseData<ProductEntity | undefined>> {
+  async getById(id: number): Promise<ResponseData<ProductEntity>> {
     const foundProduct = await this.productRepository.getById(id);
 
     if (!foundProduct) {

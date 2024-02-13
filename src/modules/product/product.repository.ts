@@ -28,7 +28,7 @@ export class ProductRepository extends Postgres implements IProductRepository {
       entity.count
     );
   }
-  async getById(id: number): Promise<ProductEntity | undefined> {
+  async getById(id: number): Promise<ProductEntity> {
     return await this.fetch<ProductEntity>(
       "select * from products where id = $1",
       id
